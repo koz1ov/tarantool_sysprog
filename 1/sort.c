@@ -26,11 +26,11 @@ static coro_struct *coros;
 static int curr_coro_i, files_count;
 
 #define coro_yield() ({						\
-	int old_i = curr_coro_i;    									\
-	curr_coro_i = (curr_coro_i + 1) % files_count;					\
+    int old_i = curr_coro_i;    									\
+    curr_coro_i = (curr_coro_i + 1) % files_count;					\
     coros[old_i].total_time += clock() - coros[old_i].last_timestamp; \
     coros[curr_coro_i].last_timestamp = clock();          			 \
-	swapcontext(&coros[old_i].context, &coros[curr_coro_i].context); 				\
+    swapcontext(&coros[old_i].context, &coros[curr_coro_i].context); 				\
 })
 
 // subroutine for 'void merge_sort(int*, size_t)'
