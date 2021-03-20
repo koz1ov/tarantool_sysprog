@@ -218,7 +218,7 @@ static void merge_arrays_list(array_struct *arrays, size_t arrays_count)
     merge_arrays(&arrays[0], &arrays[arrays_count / 2]);
 }
 
-#define stack_size 32 * 1024 * 1024
+#define stack_size 32 * 1024
 
 static void* allocate_stack()
 {
@@ -231,13 +231,13 @@ static void* allocate_stack()
     return stack;
 }
 
-void print_coro_durations()
+static void print_coro_durations()
 {
     for (int i = 0; i < files_count; ++i)
         printf("Coroutine %d ran for %ld us\n", i, coros[i].total_time * 1000000 / CLOCKS_PER_SEC);
 }
 
-void init_coros(char *filenames[], array_struct *sorted_arrays, ucontext_t *main_context)
+static void init_coros(char *filenames[], array_struct *sorted_arrays, ucontext_t *main_context)
 {
     coros = malloc(files_count * sizeof(coro_struct));
     for (int i = 0; i < files_count; ++i) {
