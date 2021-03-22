@@ -14,6 +14,7 @@ typedef struct coro_struct
     ucontext_t context;
     clock_t last_timestamp;
     clock_t total_time;
+    int is_finished;
 } coro_struct;
 
 typedef struct array_struct
@@ -28,9 +29,16 @@ static int curr_coro_i, files_count;
 #define coro_yield() ({						\
     int old_i = curr_coro_i;    									\
     curr_coro_i = (curr_coro_i + 1) % files_count;					\
-    coros[old_i].total_time += clock() - coros[old_i].last_timestamp; \
-    coros[curr_coro_i].last_timestamp = clock();          			 \
-    swapcontext(&coros[old_i].context, &coros[curr_coro_i].context); 				\
+    if (!coros[old_i].is_finished)                                             \
+        coros[old_i].total_time += clock() - coros[old_i].last_timestamp; \
+    if (!coros[curr_coro_i].is_finished)                                        \
+        coros[curr_coro_i].last_timestamp = clock();          			 \
+    swapcontext(&coros[old_i].context, &coros[curr_coro_i].context); 		\
+})
+
+#define coro_mark_finished() ({ \
+    coros[curr_coro_i].total_time += clock() - coros[curr_coro_i].last_timestamp; \
+    coros[curr_coro_i].is_finished = 1; \
 })
 
 // subroutine for 'void merge_sort(int*, size_t)'
@@ -176,6 +184,8 @@ static void sort_file(char* filename, array_struct *res_arr)
     res_arr->size = ints_count;
     coro_yield();
 
+    coro_mark_finished();
+
     printf("Coro %d finished sorting\n", curr_coro_i);
     coro_yield();
     jobs_running--;
@@ -250,6 +260,7 @@ static void init_coros(char *filenames[], array_struct *sorted_arrays, ucontext_
 
         coros[i].last_timestamp = clock();
         coros[i].total_time = 0;
+        coros[i].is_finished = 0;
     }
 }
 
