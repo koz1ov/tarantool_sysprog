@@ -7,52 +7,52 @@
 #include <sys/param.h>
 
 enum {
-	BLOCK_SIZE = 512,
-	MAX_FILE_SIZE = 1024 * 1024 * 1024,
+    BLOCK_SIZE = 512,
+    MAX_FILE_SIZE = 1024 * 1024 * 1024,
 };
 
 /** Global error code. Set from any function on any error. */
 static enum ufs_error_code ufs_error_code = UFS_ERR_NO_ERR;
 
 struct block {
-	/** Block memory. */
-	char *memory;
-	/** How many bytes are occupied. */
-	int occupied;
-	/** Next block in the file. */
-	struct block *next;
-	/** Previous block in the file. */
-	struct block *prev;
+    /** Block memory. */
+    char *memory;
+    /** How many bytes are occupied. */
+    int occupied;
+    /** Next block in the file. */
+    struct block *next;
+    /** Previous block in the file. */
+    struct block *prev;
 };
 
 struct file {
-	/** Double-linked list of file blocks. */
-	struct block *block_list;
-	/**
-	 * Last block in the list above for fast access to the end
-	 * of file.
-	 */
-	struct block *last_block;
-	/** How many file descriptors are opened on the file. */
-	int refs;
-	/** File name. */
-	const char *name;
-	/** Files are stored in a double-linked list. */
-	struct file *next;
-	struct file *prev;
+    /** Double-linked list of file blocks. */
+    struct block *block_list;
+    /**
+     * Last block in the list above for fast access to the end
+     * of file.
+     */
+    struct block *last_block;
+    /** How many file descriptors are opened on the file. */
+    int refs;
+    /** File name. */
+    const char *name;
+    /** Files are stored in a double-linked list. */
+    struct file *next;
+    struct file *prev;
 
-	int was_deleted;
+    int was_deleted;
 };
 
 /** List of all files. */
 static struct file *file_list = NULL;
 
 struct filedesc {
-	struct file *file;
+    struct file *file;
 
-	struct block *block;
-	int block_idx;
-	int offset;
+    struct block *block;
+    int block_idx;
+    int offset;
 };
 
 /**
@@ -82,7 +82,7 @@ static int file_descriptor_capacity = 0;
 enum ufs_error_code
 ufs_errno()
 {
-	return ufs_error_code;
+    return ufs_error_code;
 }
 
 static int
@@ -183,7 +183,7 @@ ufs_open(const char *filename, int flags)
         file_list = cur_file;
     }
 
-	return add_descriptor(cur_file);
+    return add_descriptor(cur_file);
 }
 
 ssize_t
@@ -275,15 +275,15 @@ ufs_close(int fd)
 {
     check_is_descriptor_valid(fd);
 
-	struct file *cur_file = file_descriptors[fd]->file;
+    struct file *cur_file = file_descriptors[fd]->file;
 
     cur_file->refs--;
-	if (cur_file->was_deleted && !cur_file->refs)
+    if (cur_file->was_deleted && !cur_file->refs)
         free_file(cur_file);
 
     free(file_descriptors[fd]);
-	file_descriptors[fd] = NULL;
-	return 0;
+    file_descriptors[fd] = NULL;
+    return 0;
 }
 
 int
@@ -308,7 +308,7 @@ ufs_delete(const char *filename)
     else
         file->was_deleted = 1;
 
-	return 0;
+    return 0;
 }
 
 void

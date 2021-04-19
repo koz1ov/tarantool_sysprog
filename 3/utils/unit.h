@@ -25,12 +25,12 @@
 })
 
 #define unit_check(cond, msg) ({					\
-	if (! (cond)) {							\
-		printf("not ok - %s\n", (msg));				\
-		unit_fail_if(true);					\
-	} else {							\
-		printf("ok - %s\n", (msg));				\
-	}								\
+    if (! (cond)) {							\
+        printf("not ok - %s\n", (msg));				\
+        unit_fail_if(true);					\
+    } else {							\
+        printf("ok - %s\n", (msg));				\
+    }								\
 })
 
 #endif

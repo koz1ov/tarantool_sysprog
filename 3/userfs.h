@@ -26,42 +26,42 @@
  * Flags for ufs_open call.
  */
 enum open_flags {
-	/**
-	 * If the flag specified and a file does not exist -
-	 * create it.
-	 */
-	UFS_CREATE = 1,
+    /**
+     * If the flag specified and a file does not exist -
+     * create it.
+     */
+    UFS_CREATE = 1,
 
 #ifdef NEED_OPEN_FLAGS
 
-	/**
-	 * With this flag it is allowed to only read the file.
-	 */
-	UFS_READ_ONLY = 2,
-	/**
-	 * With this flag it is allowed to only write into the
-	 * file.
-	 */
-	UFS_WRITE_ONLY = 4,
-	/**
-	 * With this flag it is allowed to both read and write
-	 * into the file.
-	 */
-	UFS_READ_WRITE = 8,
+    /**
+     * With this flag it is allowed to only read the file.
+     */
+    UFS_READ_ONLY = 2,
+    /**
+     * With this flag it is allowed to only write into the
+     * file.
+     */
+    UFS_WRITE_ONLY = 4,
+    /**
+     * With this flag it is allowed to both read and write
+     * into the file.
+     */
+    UFS_READ_WRITE = 8,
 
 #endif
 };
 
 /** Possible errors from all functions. */
 enum ufs_error_code {
-	UFS_ERR_NO_ERR = 0,
-	UFS_ERR_NO_FILE,
-	UFS_ERR_NO_MEM,
-	UFS_ERR_NOT_IMPLEMENTED,
+    UFS_ERR_NO_ERR = 0,
+    UFS_ERR_NO_FILE,
+    UFS_ERR_NO_MEM,
+    UFS_ERR_NOT_IMPLEMENTED,
 
 #ifdef NEED_OPEN_FLAGS
 
-	UFS_ERR_NO_PERMISSION,
+    UFS_ERR_NO_PERMISSION,
 #endif
 };
 
